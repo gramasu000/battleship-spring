@@ -1,21 +1,56 @@
 package com.revature.battleship.domain;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
-import javax.persistence.Entity;
-import javax.io.Serializable;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Game implements Serializable {
+
+@Document(collection = "games")
+public class Game {
   
-  private int questionId;
+  @Id
+  private String gameId;
 
-  Map<String, String> board;
+  private Map<String, String> board;
 
-  Set<String> unattackedPoints;
+  private Set<String> targetSquares;
 
-  Set<String> attackedPoints;
+
+  /**
+   * Get gameId.
+   *
+   * @return gameId as String.
+   */
+  public String getGameId()
+  {
+    return gameId;
+  }
   
+  /**
+   * Set gameId.
+   *
+   * @param gameId the value to set.
+   */
+  public void setGameId(String gameId)
+  {
+    this.gameId = gameId;
+  }
 
-    
+  public Map<String, String> getBoard() {
+    return this.board;
+  }
+
+  public void setBoard(Map<String, String> board) {
+    this.board = board;
+  }
+
+  public Set<String> getTargetSquares() {
+    return this.targetSquares;
+  }
+
+  public void setTargetSquares(Set<String> targetSquares) {
+    this.targetSquares = targetSquares;
+  }
+
 }
