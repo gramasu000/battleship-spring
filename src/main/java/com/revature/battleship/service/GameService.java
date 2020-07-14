@@ -52,4 +52,12 @@ public class GameService {
     this.gameRepository.save(game);
   }
 
+  public Game getGame(String gameId) {
+    return this.gameRepository.findByGameId(gameId);
+  }
+
+  public void deleteGame(Game game) {
+    this.gameRepository.delete(game);
+  }
+
 }

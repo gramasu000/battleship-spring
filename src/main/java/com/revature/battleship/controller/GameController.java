@@ -1,13 +1,13 @@
 package com.revature.battleship.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import java.util.*;
+
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.battleship.service.GameService;
+import com.revature.battleship.domain.Game;
 
 @RestController
 public class GameController {
@@ -24,10 +24,24 @@ public class GameController {
     return "Documentation Here";
   } 
 
+  @GetMapping("/game/{gameid}")
+  public Map<String, String> getGame(@PathVariable(name = "gameid") String gameId) {
+    Game game = this.gameService.getGame(gameId);
+    return game.getBoard(); 
+  }
+
+  @DeleteMapping("/game/{gameid}")
+  public String deleteGame(@PathVariable(name = "gameid") String gameId) {
+    Game game = this.gameService.getGame(gameId);
+    this.gameService.deleteGame(game);
+    return "Delete Successful";
+  }
+  
   @PostMapping("/game/{gameid}")
-  public String createGame(@PathVariable(name = "gameid") String gameId) { 
-    this.gameService.saveGame(this.gameService.createNewGame(gameId));
-    return "success";
+  public Map<String, String> createGame(@PathVariable(name = "gameid") String gameId) { 
+    Game game = this.gameService.createNewGame(gameId);
+    this.gameService.saveGame(game);
+    return game.getBoard();
   }
 
 }
