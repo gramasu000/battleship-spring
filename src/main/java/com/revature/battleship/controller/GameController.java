@@ -31,6 +31,16 @@ public class GameController {
     return game.getBoard(); 
   }
 
+  @GetMapping("/game/{gameid}/status")
+  public String gameWin(@PathVariable(name = "gameid") String gameId) {
+    Game game = this.gameService.getGame(gameId);
+    if (game.getTargetSquares().isEmpty()) {
+      return "over";
+    } else {
+      return "playing";
+    }
+  }
+
   @DeleteMapping("/game/{gameid}")
   public String deleteGame(@PathVariable(name = "gameid") String gameId) {
     Game game = this.gameService.getGame(gameId);

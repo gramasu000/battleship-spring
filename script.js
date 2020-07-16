@@ -5,7 +5,8 @@ let boardMetaData = {
   //url: 'http://ec2-3-15-213-173.us-east-2.compute.amazonaws.com:8080',
   url: 'http://localhost:8080',
   gameId: null,
-  board: null
+  board: null,
+  status: null
 }
 
 function drawBoard(numrows, numcols) {
@@ -38,7 +39,7 @@ function drawBoard(numrows, numcols) {
 }
 
 function randomString() {
-  let numchars = Math.floor(Math.random() * 10) + 1;
+  let numchars = Math.floor(Math.random() * 10) + 11;
   let str = "";
   for (let i = 0; i < numchars; i++) {
     let index = Math.floor(Math.random() * boardMetaData.letters.length);
@@ -59,24 +60,26 @@ function newGame() {
     .then((resp) => resp.json())
     .then((board) => {
       console.log("Got Game");
-      boardMetaData.board = board; 
+      boardMetaData.board = board;
+      boardMetaData.status = "playing";
       drawBoard(boardMetaData.numRows, boardMetaData.numCols);
     })
 }
 
 function makeMove(move) {
   console.log("Updating Game");
-  let fullUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}/${move}`;
-  fetch(fullUrl, { 
-    method: 'PUT', 
-    mode: 'cors',
-
-  })
-    .then((resp) => resp.json())
+  let firstUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}/${move}`;
+  let secondUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}/status`;
+  fetch(firstUrl, { method: 'PUT', mode: 'cors' }).then((resp) => resp.json())
     .then((board) => {
       console.log("Got Updated Game");
       boardMetaData.board = board; 
       drawBoard(boardMetaData.numRows, boardMetaData.numCols);
+      fetch(secondUrl, { method: 'GET', mode: 'cors' }).then((resp) => resp.text())
+        .then((status) => {
+          console.log("Got Updated Game Status: " + status);
+          boardMetaData.status = status;
+        });
     })
 }
 
