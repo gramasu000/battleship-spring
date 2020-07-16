@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.revature.battleship.service.GameService;
 import com.revature.battleship.domain.Game;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://gramasu000.github.io/battleship-spring/")
 @RestController
 public class GameController {
 
