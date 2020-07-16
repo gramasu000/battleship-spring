@@ -60,4 +60,18 @@ public class GameService {
     this.gameRepository.delete(game);
   }
 
+  public Game makeMove(Game game, String move) {
+    Map<String,String> board = game.getBoard();
+    Set<String> targetSquares = game.getTargetSquares();
+    if (targetSquares.contains(move)) {
+      targetSquares.remove(move);
+      board.put(move, "hit");
+    } else {
+      board.put(move, "miss");
+    }
+    game.setTargetSquares(targetSquares);
+    game.setBoard(board);
+    return game;
+  }
+
 }

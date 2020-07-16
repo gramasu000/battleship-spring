@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.revature.battleship.service.GameService;
 import com.revature.battleship.domain.Game;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 public class GameController {
 
@@ -40,6 +41,16 @@ public class GameController {
   @PostMapping("/game/{gameid}")
   public Map<String, String> createGame(@PathVariable(name = "gameid") String gameId) { 
     Game game = this.gameService.createNewGame(gameId);
+    this.gameService.saveGame(game);
+    return game.getBoard();
+  }
+
+  @PutMapping("/game/{gameid}/{move}")
+  public Object makeMove(@PathVariable(name = "gameid") String gameId, 
+      @PathVariable(name = "move") String move) 
+  {
+    Game game = this.gameService.getGame(gameId);
+    game = this.gameService.makeMove(game, move);
     this.gameService.saveGame(game);
     return game.getBoard();
   }
