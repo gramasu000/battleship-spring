@@ -36,6 +36,12 @@ function drawBoard(numrows, numcols) {
   }
 
   $("#board").html(table);
+
+  if (boardMetaData.status === 'playing') {
+    $('#msc').html('');
+  } else {
+    $('#msc').html('<button class="btn btn-light" onclick="newGame()">New Game</button>');
+  }
 }
 
 function randomString() {
@@ -67,6 +73,7 @@ function newGame() {
 }
 
 function makeMove(move) {
+  if (boardMetaData.status === "over") { return; }
   console.log("Updating Game");
   let firstUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}/${move}`;
   let secondUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}/status`;
@@ -74,11 +81,11 @@ function makeMove(move) {
     .then((board) => {
       console.log("Got Updated Game");
       boardMetaData.board = board; 
-      drawBoard(boardMetaData.numRows, boardMetaData.numCols);
       fetch(secondUrl, { method: 'GET', mode: 'cors' }).then((resp) => resp.text())
         .then((status) => {
           console.log("Got Updated Game Status: " + status);
           boardMetaData.status = status;
+          drawBoard(boardMetaData.numRows, boardMetaData.numCols);
         });
     })
 }
