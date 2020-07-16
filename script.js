@@ -40,7 +40,7 @@ function drawBoard(numrows, numcols) {
   if (boardMetaData.status === 'playing') {
     $('#msc').html('');
   } else {
-    $('#msc').html('<button class="btn btn-light" onclick="newGame()">New Game</button>');
+    $('#msc').html('<button class="btn btn-light" onclick="newGameClick()">New Game</button>');
   }
 }
 
@@ -72,6 +72,19 @@ function newGame() {
     })
 }
 
+function deleteGame() {
+  console.log("Deleting Game");
+  let fullUrl = `${boardMetaData.url}/game/${boardMetaData.gameId}`;
+  fetch(fullUrl, { method: 'DELETE', mode: 'cors' })
+    .then((resp) => resp.text())
+    .then((msg) => { console.log(msg); })
+}
+
+function newGameClick() {
+  deleteGame();
+  newGame();
+}
+
 function makeMove(move) {
   if (boardMetaData.status === "over") { return; }
   console.log("Updating Game");
@@ -90,7 +103,7 @@ function makeMove(move) {
     })
 }
 
-window.onload = function() {
-  newGame();
-}
+window.onload = newGame;
+
+window.onunload = deleteGame;
 
