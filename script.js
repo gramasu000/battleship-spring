@@ -2,8 +2,8 @@ let boardMetaData = {
   letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   numRows: 10,
   numCols: 10,
-  //url: 'http://ec2-3-15-213-173.us-east-2.compute.amazonaws.com:8080',
-  url: 'http://localhost:8080',
+  url: 'http://ec2-3-15-213-173.us-east-2.compute.amazonaws.com:8080',
+  //url: 'http://localhost:8080',
   gameId: null,
   board: null,
   status: null
