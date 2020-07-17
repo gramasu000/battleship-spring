@@ -31,12 +31,59 @@ public class GameService {
     return board; 
   }
 
+  private String[] generateShip(int length) {
+    Random rand = new Random();
+    int dir = rand.nextInt(2);
+    String[] potentialTargets = new String[length];
+    if (dir == 0) {
+      int maxcol = cols.length - length + 1;
+      int maxrow = rows.length;
+      int col = rand.nextInt(maxcol);
+      int row = rand.nextInt(maxrow);
+      for (int i = col; i < col + length; i++) {
+        String square = this.cols[i] + this.rows[row];
+        potentialTargets[i-col] = square;
+      }
+    } else {
+      int maxcol = cols.length;
+      int maxrow = rows.length - length + 1;
+      int col = rand.nextInt(maxcol);
+      int row = rand.nextInt(maxrow);
+      for (int i = row; i < row + length; i++) {
+        String square = this.cols[col] + this.rows[i];
+        potentialTargets[i-row] = square;
+      }
+    }
+    return potentialTargets;
+  }
+
+  private boolean checkOverlap(String[] potentialTargets, Set<String> targets) {
+    for (String target : potentialTargets) {
+      if (targets.contains(target)) {
+        return true;
+      }
+    }
+    return false;
+  } 
+
+  private Set<String> placeShip(Set<String> targets, int length) {
+    String[] shipTargets = this.generateShip(length);
+    while (this.checkOverlap(shipTargets, targets)) {
+      shipTargets = this.generateShip(length);
+    } 
+    for (String target : shipTargets) {
+      targets.add(target);
+    }
+    return targets;
+  }
+
   private Set<String> initTargets() {
     Set<String> targets = new HashSet<>();
-    targets.add("A1");
-    targets.add("B1");
-    targets.add("C1");
-    targets.add("D1");
+    targets = this.placeShip(targets, 2);
+    targets = this.placeShip(targets, 3);
+    targets = this.placeShip(targets, 3);
+    targets = this.placeShip(targets, 4);
+    targets = this.placeShip(targets, 5);
     return targets;
   }
 
