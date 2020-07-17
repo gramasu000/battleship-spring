@@ -2,11 +2,24 @@ let boardMetaData = {
   letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   numRows: 10,
   numCols: 10,
-  url: 'http://ec2-3-15-213-173.us-east-2.compute.amazonaws.com:8080',
-  //url: 'http://localhost:8080',
+  //url: 'http://ec2-3-15-213-173.us-east-2.compute.amazonaws.com:8080',
+  url: 'http://localhost:8080',
   gameId: null,
   board: null,
   status: null
+}
+
+function calculateScore() {
+  let hits = 0; let attacks = 0;
+  for (let key of Object.keys(boardMetaData.board)) {
+    if (boardMetaData.board[key] === "hit") {
+      hits++;
+      attacks++;
+    } else if (boardMetaData.board[key] === "miss") {
+      attacks++;
+    }
+  }
+  return { hits, attacks };
 }
 
 function drawBoard(numrows, numcols) {
@@ -38,9 +51,12 @@ function drawBoard(numrows, numcols) {
   $("#board").html(table);
 
   if (boardMetaData.status === 'playing') {
-    $('#msc').html('');
+    let score = calculateScore();
+    $('#score').html(`<h4>${score.hits}/${score.attacks}</h4>`);
   } else {
-    $('#msc').html('<button class="btn btn-light" onclick="newGameClick()">New Game</button>');
+    let score = calculateScore();
+    $('#score').html(`<h4>${score.hits}/${score.attacks}</h4>`);
+    $('#msc').html('<button class="btn btn-light mx-2" onclick="newGameClick()">New Game</button>');
   }
 }
 
